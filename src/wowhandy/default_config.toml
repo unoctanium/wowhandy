@@ -1,0 +1,65 @@
+# wowhandy configuration – every value is optional; missing values use the default.
+# Location: ~/.config/wowhandy/config.toml (or $WOWHANDY_CONFIG).
+# Test without the game:  wowhandy --dry-run "Kanal Gruppe wir pullen gleich"
+
+[chat]
+max_length = 255                # WoW chat limit, including the channel command
+strip_trailing_period = true    # "Hello." -> "Hello" (an ellipsis stays)
+# Key sequence: [Enter] -> paste (Ctrl+V) -> [Enter]. wowhandy never closes the chat.
+# Leading Enter opens the chat. Set false if your chat input is already open
+# (e.g. WoW without gamepad mode keeps it closed, the gamepad alpha keeps it open).
+send_leading_enter = true
+# Trailing Enter sends the message. Turn Handy's own auto-submit OFF.
+send_trailing_enter = true
+chat_open_delay = 0.10          # seconds between leading Enter and paste
+paste_delay = 0.10              # seconds between paste and trailing Enter
+restore_clipboard = true        # put your previous clipboard text back afterwards
+clipboard_restore_delay = 0.30  # Proton/Wine reads the clipboard late
+log_text = false                # true = write recognized text to the log file
+
+[prefixes]
+# Channel: "<lead word> <channel word> <text>"
+#   "channel party pull boss" -> "/p pull boss", "Kanal Gruppe wir pullen" -> "/p wir pullen"
+# Without a lead word the text goes to the active chat channel.
+# A lead word followed by an unknown channel sends nothing.
+channel_words = ["channel", "kanal"]
+# Slash command (English): "command slash sit" or "command sit" -> "/sit"
+command_words = ["command"]
+slash_words = ["slash"]
+# Tolerate misheard control words (lead word and channel word only); 0 = off.
+# "Canal Gilder" -> /g, "Kanal schreihen" -> /y; ordinary sentences are not touched.
+fuzzy_threshold = 0.75
+# Also tolerate a misheard command lead word ("Komm an sit" -> /sit). Riskier: off.
+fuzzy_commands = false
+
+[linux]
+# Clipboard tool: "auto" (xclip when an X display exists, else wl-copy),
+# "xclip" (WoW under Proton/XWayland) or "wl-copy" (native Wayland applications)
+clipboard = "auto"
+
+# Channel word after the lead word -> WoW chat command. Speak it in the language
+# of the sentence: "channel guild ..." in English, "Kanal Gilde ..." in German.
+# This list replaces the built-in one completely; add spellings your speech
+# recognizer produces as extra keys.
+[triggers]
+party = "/p"
+gruppe = "/p"
+raid = "/raid"
+rate = "/raid"        # common mishearing of "Raid" in German sentences
+guild = "/g"
+guilt = "/g"          # common mishearing of "guild"
+gilde = "/g"
+gilt = "/g"           # common mishearing of "Gilde"
+officer = "/o"
+offizier = "/o"
+say = "/s"
+sagen = "/s"
+yell = "/y"
+yellow = "/y"         # common mishearing of "yell"
+schreien = "/y"
+instance = "/i"
+instanz = "/i"
+reply = "/r"
+antwort = "/r"
+alert = "/rw"
+warnung = "/rw"

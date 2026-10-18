@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wowhandy"
+version = "0.1.0"
+description = "World of Warcraft chat layer for the Handy speech-to-text app: channel prefixes, slash commands and reliable chat pasting"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []  # standard library only, on purpose
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.scripts]
+wowhandy = "wowhandy.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+wowhandy = ["default_config.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
