@@ -6,14 +6,87 @@ transcribes, wowhandy turns what you said into a proper chat line and pastes it
 into the game.
 
 ```
-"Kanal Gruppe, wir pullen gleich."   ->  /p wir pullen gleich
+"Kanal Gruppe, wir pullen gleich."       ->  /p wir pullen gleich
 "channel guild anyone up for a dungeon"  ->  /g anyone up for a dungeon
-"command roll 100"                    ->  /roll 100
-"Grüße aus Gütersloh"                 ->  Grüße aus Gütersloh   (active channel)
+"command roll 100"                       ->  /roll 100
+"Grüße aus Gütersloh"                    ->  Grüße aus Gütersloh   (active channel)
 ```
 
-No game addon, no network, no Python packages – just the standard library and
-two small system tools.
+## Install – one command
+
+> **Not `pip install`.** PyPI shows that line on every project page; on most
+> current Linux systems it does not work for programs like this one. Use this
+> command instead:
+
+```sh
+curl -fsSL https://github.com/unoctanium/wowhandy/releases/latest/download/install.sh | sh
+```
+
+It puts wowhandy at `~/.local/bin/wowhandy`, creates your settings file,
+checks your system and tells you exactly what is missing and what to enter in
+Handy. No `sudo`, nothing else on your system is changed.
+
+<details>
+<summary>Prefer to look at the script first?</summary>
+
+```sh
+curl -fsSLo install.sh https://github.com/unoctanium/wowhandy/releases/latest/download/install.sh
+less install.sh
+sh install.sh
+```
+</details>
+
+## Set up Handy
+
+Open Handy → **Settings → Advanced** and set:
+
+| Setting | Value |
+|---|---|
+| Paste method | **External Script** |
+| Script path | **`/home/<you>/.local/bin/wowhandy`** (the installer prints your exact path) |
+| Auto-submit | **off** – wowhandy presses Enter itself |
+| Language | **auto**, translate to English **off** |
+
+Model: pick one with automatic language detection if you mix languages – in
+our tests **Qwen3-ASR** and **Parakeet TDT 0.6B v3** worked well on the GPU
+without noticeable frame drops. In WoW the chat must open with **Enter** (the
+default key binding).
+
+Optional: under **custom words** add your lead and channel words (`Kanal,
+channel, Gruppe, party, Gilde, guild, Raid, Offizier, officer, command, slash`)
+– it helps the recognizer; wowhandy's fuzzy matching covers the rest.
+
+That's it – hold Handy's push-to-talk key in the game and speak.
+
+## Update and uninstall
+
+```sh
+wowhandy --update               # newest version
+wowhandy --uninstall            # remove the program, keep your settings
+wowhandy --uninstall --purge    # remove everything
+```
+
+After uninstalling, set Handy's paste method back to its default.
+
+## If something is missing
+
+`wowhandy --check` shows what is missing and the command to fix it for your
+distribution. wowhandy needs three things on Linux, all set up once:
+
+- **Python 3.11 or newer** – already there on current distributions.
+- **ydotool** with its background service, to press Enter and paste. Your user
+  must be allowed to use `/dev/uinput` (usually the `input` group).
+- **xclip** for the clipboard (WoW under Proton/Wine uses the X11 clipboard),
+  or `wl-clipboard` for native Wayland programs.
+
+Arch / CachyOS example:
+
+```sh
+sudo pacman -S ydotool xclip
+systemctl --user enable --now ydotool.service
+```
+
+macOS and Windows are not supported yet.
 
 ## Why wowhandy
 
@@ -39,124 +112,6 @@ Handy pastes text. Chatting in WoW needs a bit more:
   is restored afterwards.
 - **WoW-ready text:** 255-character limit including the command, trailing
   period removed, control characters stripped.
-
-## Requirements (Linux)
-
-- [Handy](https://github.com/cjpais/Handy) with push-to-talk working on your desktop
-- Python 3.11 or newer (only the standard library is used)
-- `ydotool` with the `ydotoold` daemon running, for key presses
-  (works on X11 and Wayland; your user must be allowed to use `/dev/uinput`,
-  usually via the `input` group)
-- `xclip` (WoW under Proton/Wine runs on XWayland and uses the X11 clipboard)
-  or `wl-clipboard` for native Wayland applications
-
-Arch / CachyOS:
-
-```sh
-sudo pacman -S ydotool xclip
-systemctl --user enable --now ydotool.service
-```
-
-macOS and Windows are not supported yet; the code is prepared for them (see
-`src/wowhandy/paste/`).
-
-## Installation
-
-Two ways to install – both give you the same program:
-
-| | **A) Single file** (`wowhandy.pyz`) | **B) pipx from PyPI** (`wowhandy` command) |
-|---|---|---|
-| What you get | one executable file (~13 KB) containing everything | a `wowhandy` command in its own isolated environment |
-| Needs | Python ≥ 3.11 | Python ≥ 3.11 and [pipx](https://pipx.pypa.io/) |
-| Install | download one file | `pipx install wowhandy` |
-| Update | download the new file over the old one | `pipx upgrade wowhandy` |
-| Uninstall | delete one file | `pipx uninstall wowhandy` |
-| Handy path | `~/.local/bin/wowhandy.pyz` | `~/.local/bin/wowhandy` |
-| Good for | simplest setup, nothing installed, easy to copy to another machine | managed updates with one command |
-| Downsides | you call it by its file name; updates are manual downloads | needs pipx |
-
-### A) Single file
-
-```sh
-curl -fLo ~/.local/bin/wowhandy.pyz --create-dirs \
-  https://github.com/unoctanium/wowhandy/releases/latest/download/wowhandy.pyz
-chmod +x ~/.local/bin/wowhandy.pyz
-```
-
-- **Update:** run the same two commands again (Handy keeps using the same path).
-- **Uninstall:** `rm ~/.local/bin/wowhandy.pyz`
-
-### B) pipx from PyPI
-
-```sh
-pipx install wowhandy
-```
-
-- **Update:** `pipx upgrade wowhandy`
-- **Uninstall:** `pipx uninstall wowhandy`
-
-### From source (development version)
-
-```sh
-pipx install git+https://github.com/unoctanium/wowhandy        # as a command
-# or build the single file yourself:
-git clone https://github.com/unoctanium/wowhandy && cd wowhandy
-python3 scripts/build_zipapp.py                                 # -> dist/wowhandy.pyz
-```
-
-### After installing
-
-Check the setup and create your config file:
-
-```sh
-wowhandy --check          # config, ydotool, ydotoold, clipboard tool
-wowhandy --init-config    # writes ~/.config/wowhandy/config.toml (commented)
-```
-
-With option A call `~/.local/bin/wowhandy.pyz` instead of `wowhandy`.
-
-### Updates and your config file
-
-Updating never touches `~/.config/wowhandy/config.toml`. New defaults (for
-example new channel words) therefore do not appear in your file automatically –
-your `[triggers]` list replaces the built-in one. Compare after an update:
-
-```sh
-wowhandy --show-default-config | diff ~/.config/wowhandy/config.toml -
-```
-
-…and copy over what you want, or start fresh with
-`wowhandy --init-config --force` (overwrites your file).
-
-### Removing everything
-
-Uninstall as above, then delete the config and the log, and switch Handy's
-paste method back to its default:
-
-```sh
-rm -r ~/.config/wowhandy ~/.local/state/wowhandy
-```
-
-## Configure Handy
-
-In Handy's settings:
-
-1. **Paste method:** `External Script`
-2. **Script path:** the full path, e.g. `/home/you/.local/bin/wowhandy`
-   (pipx) or `/home/you/.local/bin/wowhandy.pyz` (single file)
-3. **Auto-submit (Enter after paste): off** – wowhandy presses Enter itself
-   (`send_trailing_enter`). Otherwise Enter is pressed twice.
-4. **Language:** `auto`, and **translate to English: off** – otherwise German
-   speech comes out translated.
-5. **Model:** one with automatic language detection if you mix languages.
-   In our tests Qwen3-ASR and Parakeet TDT 0.6B v3 worked well on the GPU with
-   no noticeable frame drops.
-6. Optional – **custom words:** adding your lead and channel words
-   (`Kanal, channel, Gruppe, party, Gilde, guild, Raid, Offizier, officer,
-   command, slash`) helps the recognizer; wowhandy's fuzzy matching covers the
-   rest.
-
-In WoW the chat must open with **Enter** (default key binding).
 
 ## Configure wowhandy
 
@@ -238,6 +193,36 @@ and say something with Handy.
 
 `0` pasted (or nothing to paste), `1` not sent (reason in the log), `2`
 invalid configuration.
+
+## Alternatives for developers
+
+The installer is the recommended way. If you prefer a Python tool manager, both
+also end up at `~/.local/bin/wowhandy`:
+
+```sh
+pipx install wowhandy           # update: pipx upgrade wowhandy, remove: pipx uninstall wowhandy
+uv tool install wowhandy        # update: uv tool upgrade wowhandy, remove: uv tool uninstall wowhandy
+```
+
+From source:
+
+```sh
+git clone https://github.com/unoctanium/wowhandy && cd wowhandy
+python3 scripts/build_zipapp.py   # -> dist/wowhandy.pyz (the single file the installer downloads)
+```
+
+### Updates and your settings file
+
+Updating never touches `~/.config/wowhandy/config.toml`. New defaults (for
+example new channel words) therefore do not appear in your file automatically –
+your `[triggers]` list replaces the built-in one. Compare after an update:
+
+```sh
+wowhandy --show-default-config | diff ~/.config/wowhandy/config.toml -
+```
+
+…and copy over what you want, or start fresh with
+`wowhandy --init-config --force` (overwrites your file).
 
 ## Development
 

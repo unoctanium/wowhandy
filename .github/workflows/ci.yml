@@ -29,3 +29,11 @@ jobs:
           python scripts/build_zipapp.py
           ./dist/wowhandy.pyz --version
           test "$(./dist/wowhandy.pyz --dry-run 'Kanal Gruppe wir pullen gleich.')" = "/p wir pullen gleich"
+      - name: Installer test (throwaway HOME)
+        run: |
+          home="$RUNNER_TEMP/home"
+          env HOME="$home" WOWHANDY_URL="file://$PWD/dist/wowhandy.pyz" sh install.sh
+          "$home/.local/bin/wowhandy" --version
+          test -f "$home/.config/wowhandy/config.toml"
+          env HOME="$home" "$home/.local/bin/wowhandy" --uninstall --purge
+          test ! -e "$home/.local/bin/wowhandy"

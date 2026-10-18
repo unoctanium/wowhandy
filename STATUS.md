@@ -13,6 +13,28 @@ and as GitHub release v0.1.0 with `wowhandy.pyz`
 the single file both work (throwaway venv / scratch folder). Linux only.
 93 tests pass. Repo: github.com/unoctanium/wowhandy (branch `main`, tag `v0.1.0`).
 
+**0.2.0 prepared (not yet released): "one command" install** – user request
+2026-10-18 after confusion about pip / pipx / single file (research:
+`docs/research/install-ux.md`; same pattern as uv, ruff, poetry, yt-dlp):
+- `install.sh` (POSIX sh, no sudo): downloads the release file to
+  `~/.local/bin/wowhandy` (no `.pyz`), refuses to overwrite a pipx/uv link,
+  creates the config once, runs `--check`, prints the Handy settings.
+- `wowhandy --update` (single-file install replaces itself atomically after
+  checking the download runs; pipx/uv: prints their command) and
+  `wowhandy --uninstall [--purge]` (`src/wowhandy/selfmanage.py`).
+- `--check` names the install command for the detected distribution
+  (arch/debian/fedora/suse from /etc/os-release) and prints the Handy settings
+  with the right script path.
+- README: one-command install at the very top with "Not `pip install`" note,
+  Handy setup table, update/uninstall, requirements; pipx/uv/source moved to
+  "Alternatives for developers".
+- Workflows: release attaches `install.sh`; CI runs the installer in a
+  throwaway HOME (install, config created, uninstall --purge).
+- Verified locally end to end in a throwaway HOME: install 0.1.9 → update to
+  0.2.0 → "already up to date" → uninstall keeps config → purge removes all →
+  installer refuses a pipx link. 105 tests pass.
+- **Next:** commit + push (CI), then tag v0.2.0 after the user's go.
+
 **Tested by the user (2026-10-18): works without problems in KWrite and in WoW**
 (installed and configured by the user following the README).
 

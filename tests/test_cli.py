@@ -51,3 +51,17 @@ def test_version(capsys):
 def test_show_default_config(capsys):
     assert cli.main(["--show-default-config"]) == 0
     assert 'schlachtzug = "/raid"' in capsys.readouterr().out
+
+
+def test_update_and_uninstall_flags_route_to_selfmanage(monkeypatch):
+    calls = []
+    monkeypatch.setattr(cli.selfmanage, "update", lambda: calls.append("update") or 0)
+    monkeypatch.setattr(cli.selfmanage, "uninstall", lambda purge: calls.append(("uninstall", purge)) or 0)
+    pasted = []
+    monkeypatch.setattr(cli, "paste_line", lambda line, config: pasted.append(line))
+    assert cli.main(["--update"]) == 0
+    assert cli.main(["--uninstall"]) == 0
+    assert cli.main(["--uninstall", "--purge"]) == 0
+    assert cli.main(["update"]) == 0  # spoken word, not an option
+    assert calls == ["update", ("uninstall", False), ("uninstall", True)]
+    assert pasted == ["update"]

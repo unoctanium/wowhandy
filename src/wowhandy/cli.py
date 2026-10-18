@@ -10,6 +10,8 @@ log file. Any argument that is not one of the options below is treated as text
     wowhandy --check                    check config, tools and ydotoold
     wowhandy --init-config [--force]    write the commented default config
     wowhandy --show-default-config      print the default config (compare after updates)
+    wowhandy --update                   update to the newest release (single-file install)
+    wowhandy --uninstall [--purge]      remove wowhandy (--purge: also config and log)
     wowhandy --version | --help
 
 Exit codes: 0 = pasted or nothing to do, 1 = not sent (reason in the log),
@@ -21,7 +23,7 @@ import os
 import sys
 from pathlib import Path
 
-from wowhandy import __version__
+from wowhandy import __version__, selfmanage
 from wowhandy.config import default_config_path, default_config_text, load_config
 from wowhandy.message import NotSendable, build_message
 from wowhandy.paste import PasteError, get_backend, paste_line
@@ -102,7 +104,15 @@ def cmd_check() -> int:
         print(f"  ✗ {problem}")
     if not problems:
         print("  ✓ ready to paste")
-    print(f"log: {log_path()}")
+    install = selfmanage.detect()
+    script = install.executable or "(wowhandy not found on PATH)"
+    print(f"""
+Handy settings (Settings → Advanced):
+  Paste method ......... External Script
+  Script path .......... {script}
+  Auto-submit .......... off   (wowhandy presses Enter itself)
+  Language ............. auto, translate to English: off""")
+    print(f"\nlog: {log_path()}")
     return 1 if problems else 0
 
 
@@ -128,6 +138,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if first == "--init-config" and len(argv) <= 2 and argv[1:] in ([], ["--force"]):
         return cmd_init_config(force=len(argv) == 2)
+    if first == "--update" and len(argv) == 1:
+        return selfmanage.update()
+    if first == "--uninstall" and argv[1:] in ([], ["--purge"]):
+        return selfmanage.uninstall(purge=len(argv) == 2)
     if first == "--show-default-config" and len(argv) == 1:
         print(default_config_text(), end="")
         return 0

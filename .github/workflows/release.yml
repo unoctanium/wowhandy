@@ -35,7 +35,7 @@ jobs:
         run: |
           python scripts/build_zipapp.py
           ./dist/wowhandy.pyz --version
-          mkdir zipapp && mv dist/wowhandy.pyz zipapp/
+          mkdir zipapp && mv dist/wowhandy.pyz zipapp/ && cp install.sh zipapp/
       - uses: actions/upload-artifact@v4
         with:
           name: python-dist

@@ -26,6 +26,34 @@ KEY_V = 47
 _TEXT_TARGETS = {b"UTF8_STRING", b"STRING", b"TEXT", b"text/plain", b"text/plain;charset=utf-8"}
 
 
+def distro_family(os_release: str | None = None) -> str:
+    """"arch", "debian", "fedora", "suse" or "" (from /etc/os-release ID and ID_LIKE)."""
+    if os_release is None:
+        try:
+            os_release = Path("/etc/os-release").read_text(encoding="utf-8")
+        except OSError:
+            return ""
+    ids = []
+    for line in os_release.splitlines():
+        key, _, value = line.partition("=")
+        if key in ("ID", "ID_LIKE"):
+            ids += value.strip().strip('"').split()
+    for family, names in (("arch", {"arch", "cachyos", "manjaro", "endeavouros"}),
+                          ("debian", {"debian", "ubuntu", "linuxmint", "pop"}),
+                          ("fedora", {"fedora", "rhel", "centos"}),
+                          ("suse", {"suse", "opensuse", "opensuse-tumbleweed", "opensuse-leap"})):
+        if names & set(ids):
+            return family
+    return ""
+
+
+def install_hint(package: str) -> str:
+    """Command that installs a system package on this distribution."""
+    command = {"arch": "sudo pacman -S", "debian": "sudo apt install", "fedora": "sudo dnf install",
+               "suse": "sudo zypper install"}.get(distro_family())
+    return f"{command} {package}" if command else f"install the {package} package"
+
+
 def ydotool_socket() -> Path:
     explicit = os.environ.get("YDOTOOL_SOCKET")
     if explicit:
@@ -64,18 +92,17 @@ class Backend:
     def check(self) -> list[str]:
         problems = []
         if not self.ydotool:
-            problems.append("ydotool not found (install the ydotool package)")
+            problems.append(f"ydotool not found – {install_hint('ydotool')}")
         socket_path = ydotool_socket()
         if not socket_path.is_socket() or not daemon_listening(socket_path):
-            problems.append(f"ydotoold not running (no daemon at {socket_path}; "
-                            "systemctl --user enable --now ydotool.service)")
+            problems.append("ydotoold is not running – systemctl --user enable --now ydotool.service")
         if self.clipboard == "xclip":
             if not shutil.which("xclip"):
-                problems.append("xclip not found (install the xclip package)")
+                problems.append(f"xclip not found – {install_hint('xclip')}")
             if not os.environ.get("DISPLAY"):
                 problems.append("DISPLAY not set: no X11 clipboard (use clipboard = \"wl-copy\")")
         elif not (shutil.which("wl-copy") and shutil.which("wl-paste")):
-            problems.append("wl-copy/wl-paste not found (install the wl-clipboard package)")
+            problems.append(f"wl-copy/wl-paste not found – {install_hint('wl-clipboard')}")
         return problems
 
     # --- clipboard ----------------------------------------------------------
