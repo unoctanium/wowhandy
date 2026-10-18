@@ -31,9 +31,11 @@ jobs:
           test "$(./dist/wowhandy.pyz --dry-run 'Kanal Gruppe wir pullen gleich.')" = "/p wir pullen gleich"
       - name: Installer test (throwaway HOME)
         run: |
+          # The runner sets XDG_* variables; unset them so config and log land in the throwaway HOME
           home="$RUNNER_TEMP/home"
-          env HOME="$home" WOWHANDY_URL="file://$PWD/dist/wowhandy.pyz" sh install.sh
+          noxdg="env -u XDG_CONFIG_HOME -u XDG_STATE_HOME HOME=$home"
+          $noxdg WOWHANDY_URL="file://$PWD/dist/wowhandy.pyz" sh install.sh
           "$home/.local/bin/wowhandy" --version
           test -f "$home/.config/wowhandy/config.toml"
-          env HOME="$home" "$home/.local/bin/wowhandy" --uninstall --purge
+          $noxdg "$home/.local/bin/wowhandy" --uninstall --purge
           test ! -e "$home/.local/bin/wowhandy"
