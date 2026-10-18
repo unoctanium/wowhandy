@@ -97,9 +97,12 @@ same key.
   `github.com/unoctanium/wowhandy` (origin via SSH). The user's initial commit
   contained a LICENSE (MIT, "Copyright (c) 2026 Odo Maletzki"); merged, its
   LICENSE kept. First CI run: success on Python 3.11, 3.12, 3.13, 3.14.
-  **Next:** the user sets up the GitHub environments `pypi`/`testpypi` and the
-  trusted publishers (RELEASING.md), then TestPyPI rehearsal, then tag v0.1.0 –
-  PyPI upload only after the user's explicit go.
+  Environments and trusted publishers set up by the user. **TestPyPI rehearsal
+  (2026-10-18, run 39157911387): build + testpypi success**; wowhandy 0.1.0
+  (wheel + sdist) is on test.pypi.org and installs and runs from there (checked
+  in a throwaway venv). **Next:** decide the author name in pyproject
+  ("unoctanium" vs. "Odo Maletzki" as in LICENSE), then tag v0.1.0 → PyPI +
+  GitHub release – only after the user's explicit go.
 
 **Medium**
 - GitHub repository (license: MIT, decided 2026-10-18).
