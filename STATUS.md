@@ -93,9 +93,13 @@ same key.
   source. Local check: sdist + wheel build, wheel contains template and LICENSE,
   no dependencies, installs and runs in a fresh venv. The name `wowhandy` was
   free on PyPI and TestPyPI (2026-10-18). **AUR dropped** (the user cannot
-  register an AUR account at the moment). **Next:** the user creates the GitHub
-  repo, first push, set up environments + trusted publishers, TestPyPI
-  rehearsal, then tag v0.1.0 – PyPI upload only after the user's explicit go.
+  register an AUR account at the moment). **GitHub repo created by the user and pushed (2026-10-18):**
+  `github.com/unoctanium/wowhandy` (origin via SSH). The user's initial commit
+  contained a LICENSE (MIT, "Copyright (c) 2026 Odo Maletzki"); merged, its
+  LICENSE kept. First CI run: success on Python 3.11, 3.12, 3.13, 3.14.
+  **Next:** the user sets up the GitHub environments `pypi`/`testpypi` and the
+  trusted publishers (RELEASING.md), then TestPyPI rehearsal, then tag v0.1.0 –
+  PyPI upload only after the user's explicit go.
 
 **Medium**
 - GitHub repository (license: MIT, decided 2026-10-18).
