@@ -88,16 +88,17 @@ same key.
 
 **Medium**
 - GitHub repository (license: MIT, decided 2026-10-18).
+
+**Low**
 - macOS and Windows backends – **researched 2026-10-18**, see
   `docs/research/macos-windows.md`. Feasible with `ctypes` (no dependencies).
   Blockers outside our code: Handy's UI offers "External Script" only on Linux
   (the backend runs it everywhere); Windows needs a GUI-subsystem `.exe` (no
   console window stealing focus); macOS posting keys needs Accessibility for the
   child process (inheritance unclear); no suitable system Python on Windows/macOS
-  → standalone binaries (PyInstaller in CI). Waiting for the user's decision
-  and test hardware.
-
-**Low**
+  → standalone binaries (PyInstaller in CI). Priority set to low by
+  the user (2026-10-18); open questions: test hardware (Mac / Windows PC),
+  draft a Handy Discussion post asking to show External Script on all platforms.
 - Configurable key for opening the chat (games where it is not Enter).
 - `--check` could also verify Handy's settings file (paste method, auto-submit).
 
