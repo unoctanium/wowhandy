@@ -4,8 +4,14 @@ _Last update: 2026-10-18_
 
 ## Current state
 
-Project created on 2026-10-18 at `~/Projects/wowhandy` (local git repo, branch
-`main`). Version 0.1.0, Linux only, MIT license. 93 tests pass.
+**wowhandy 0.1.0 is released (2026-10-18):** on PyPI
+(https://pypi.org/project/wowhandy/, author Odo Maletzki, MIT, wheel + sdist)
+and as GitHub release v0.1.0 with `wowhandy.pyz`
+(https://github.com/unoctanium/wowhandy/releases). Release workflow run
+39158136682: build, pypi, github-release all success. Verified like a user:
+`pip install wowhandy==0.1.0` from pypi.org and the README `curl` download of
+the single file both work (throwaway venv / scratch folder). Linux only.
+93 tests pass. Repo: github.com/unoctanium/wowhandy (branch `main`, tag `v0.1.0`).
 
 **Tested by the user (2026-10-18): works without problems in KWrite and in WoW**
 (installed and configured by the user following the README).
@@ -84,28 +90,9 @@ same key.
 - Push-to-talk listener for a double tap → Escape (close the chat): needs a
   small own listener service that watches the push-to-talk key, forwards it to
   Handy and sends Escape on a double tap. Later (user, 2026-10-18).
-- Packaging – **prepared locally 2026-10-18, not yet published:** version only in
-  `src/wowhandy/__init__.py` (pyproject reads it), project metadata/URLs for
-  `github.com/unoctanium/wowhandy`, GitHub Actions `ci.yml` (tests on Python
-  3.11–3.14 + single-file smoke test) and `release.yml` (tag `v*` → PyPI via
-  trusted publishing + GitHub release with `wowhandy.pyz`; manual run →
-  TestPyPI rehearsal), `RELEASING.md`, README install via PyPI / release file /
-  source. Local check: sdist + wheel build, wheel contains template and LICENSE,
-  no dependencies, installs and runs in a fresh venv. The name `wowhandy` was
-  free on PyPI and TestPyPI (2026-10-18). **AUR dropped** (the user cannot
-  register an AUR account at the moment). **GitHub repo created by the user and pushed (2026-10-18):**
-  `github.com/unoctanium/wowhandy` (origin via SSH). The user's initial commit
-  contained a LICENSE (MIT, "Copyright (c) 2026 Odo Maletzki"); merged, its
-  LICENSE kept. First CI run: success on Python 3.11, 3.12, 3.13, 3.14.
-  Environments and trusted publishers set up by the user. **TestPyPI rehearsal
-  (2026-10-18, run 39157911387): build + testpypi success**; wowhandy 0.1.0
-  (wheel + sdist) is on test.pypi.org and installs and runs from there (checked
-  in a throwaway venv). **Next:** decide the author name in pyproject
-  ("unoctanium" vs. "Odo Maletzki" as in LICENSE), then tag v0.1.0 → PyPI +
-  GitHub release – only after the user's explicit go.
+- ~~Packaging~~ – done: PyPI + GitHub release v0.1.0 (2026-10-18), see "Current state".
 
 **Medium**
-- GitHub repository (license: MIT, decided 2026-10-18).
 
 **Low**
 - macOS and Windows backends – **researched 2026-10-18**, see
