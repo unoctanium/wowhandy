@@ -88,8 +88,14 @@ same key.
 
 **Medium**
 - GitHub repository (license: MIT, decided 2026-10-18).
-- macOS backend (pbcopy/pbpaste + osascript/CGEvent) and Windows backend
-  (ctypes: clipboard + SendInput) behind `PasteBackend`.
+- macOS and Windows backends – **researched 2026-10-18**, see
+  `docs/research/macos-windows.md`. Feasible with `ctypes` (no dependencies).
+  Blockers outside our code: Handy's UI offers "External Script" only on Linux
+  (the backend runs it everywhere); Windows needs a GUI-subsystem `.exe` (no
+  console window stealing focus); macOS posting keys needs Accessibility for the
+  child process (inheritance unclear); no suitable system Python on Windows/macOS
+  → standalone binaries (PyInstaller in CI). Waiting for the user's decision
+  and test hardware.
 
 **Low**
 - Configurable key for opening the chat (games where it is not Enter).
