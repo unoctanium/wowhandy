@@ -5,14 +5,21 @@ _Last update: 2026-10-18_
 ## Current state
 
 Project created on 2026-10-18 at `~/Projects/wowhandy` (local git repo, branch
-`main`). Version 0.1.0, Linux only. 90 tests pass. Not yet installed for daily
-use and not yet tested in the game with Handy.
+`main`). Version 0.1.0, Linux only, MIT license. 93 tests pass.
 
-**Next step:** the user installs wowhandy (single file or pipx, see README),
-configures Handy (External Script → wowhandy, Handy auto-submit off, language
-auto, translation off), creates the config with `wowhandy --init-config` and
-tests in WoW. When it works: disable the woxation service and its
-`woxation-handy-paste` setup (see "Relation to woxation").
+**Tested by the user (2026-10-18): works without problems in KWrite and in WoW**
+(installed and configured by the user following the README).
+
+Since that test (not yet in the user's installed copy):
+- `schlachtzug = "/raid"` added to the defaults (template and built-in list).
+  The user's existing `~/.config/wowhandy/config.toml` does not get it
+  automatically (`[triggers]` replaces the defaults) – add the line by hand.
+- `--show-default-config` to compare the config after updates.
+- README: comparison of the two install options, update and uninstall
+  instructions, "Removing everything".
+
+**Next step:** user updates the installed copy and adds the Schlachtzug line;
+then backlog (see below).
 
 ## What exists
 
@@ -57,8 +64,8 @@ tests in WoW. When it works: disable the woxation service and its
 
 - Handy is the UI and recognizer; wowhandy is only the chat layer (2026-10-18).
 - Standard library only; external tools per platform.
-- Fuzzy matching on by default, fuzzy commands off by default (the user wanted
-  commands strict for now).
+- Fuzzy matching on by default; **fuzzy commands stay off** (user, 2026-10-18:
+  "works without it").
 - Lead word with unknown target → send nothing.
 - Everything in the repo in English.
 
@@ -80,7 +87,7 @@ same key.
 - Packaging: easy install (pipx from GitHub, single file release, maybe AUR).
 
 **Medium**
-- GitHub repository, license (MIT?).
+- GitHub repository (license: MIT, decided 2026-10-18).
 - macOS backend (pbcopy/pbpaste + osascript/CGEvent) and Windows backend
   (ctypes: clipboard + SendInput) behind `PasteBackend`.
 
@@ -90,5 +97,4 @@ same key.
 
 ## Open questions
 
-- License.
-- Should `fuzzy_commands` become the default after real use?
+- none

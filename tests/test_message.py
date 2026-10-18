@@ -31,6 +31,8 @@ def grammar(**prefix_overrides):
     ("Kanal Offizier wer hat Zeit?", "/o wer hat Zeit?"),
     ("channel alert Boss kommt!", "/rw Boss kommt!"),
     ("channel gilde hallo", "/g hallo"),  # languages may be mixed
+    ("Kanal Schlachtzug, morgen um acht.", "/raid morgen um acht"),
+    ("Kanal Schlacht-Zug morgen!", "/raid morgen!"),  # hyphen inside the channel word
     ("Kanalgruppe, wir pullen gleich.", "/p wir pullen gleich"),  # glued
     ("Kanal-Gilde, morgen Raid um acht.", "/g morgen Raid um acht"),  # hyphenated
 ])
@@ -68,7 +70,7 @@ def test_commands(transcript, expected):
 
 
 @pytest.mark.parametrize("transcript", [
-    "Channel J, Hilfe hier.", "channel j please help", "Kanal Schlachtzug morgen",
+    "Channel J, Hilfe hier.", "channel j please help", "Kanal Unbekannt morgen",
     "channel", "Command", "command slash", "command slash!", "command slash 123",
 ])
 def test_lead_word_without_valid_target_sends_nothing(transcript):

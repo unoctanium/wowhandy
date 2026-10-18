@@ -19,7 +19,7 @@ from wowhandy.message import Grammar
 # recognizer picks one language per recording.
 DEFAULT_TRIGGERS = {
     "party": "/p", "gruppe": "/p",
-    "raid": "/raid",
+    "raid": "/raid", "schlachtzug": "/raid",
     "guild": "/g", "gilde": "/g",
     "officer": "/o", "offizier": "/o",
     "say": "/s", "sagen": "/s",

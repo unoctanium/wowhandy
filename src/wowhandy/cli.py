@@ -9,6 +9,7 @@ log file. Any argument that is not one of the options below is treated as text
     wowhandy --dry-run "<text>"         show the chat line, paste nothing
     wowhandy --check                    check config, tools and ydotoold
     wowhandy --init-config [--force]    write the commented default config
+    wowhandy --show-default-config      print the default config (compare after updates)
     wowhandy --version | --help
 
 Exit codes: 0 = pasted or nothing to do, 1 = not sent (reason in the log),
@@ -127,6 +128,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     if first == "--init-config" and len(argv) <= 2 and argv[1:] in ([], ["--force"]):
         return cmd_init_config(force=len(argv) == 2)
+    if first == "--show-default-config" and len(argv) == 1:
+        print(default_config_text(), end="")
+        return 0
     if first == "--check" and len(argv) == 1:
         setup_logging()
         return cmd_check()

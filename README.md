@@ -62,25 +62,75 @@ macOS and Windows are not supported yet; the code is prepared for them (see
 
 ## Installation
 
-Pick one:
+There are two ways to install wowhandy. Both give you the same program; they
+differ in how it is packaged and updated.
+
+| | **A) Single file** (`wowhandy.pyz`) | **B) pipx** (`wowhandy` command) |
+|---|---|---|
+| What you get | one executable file (~13 KB) containing everything | a `wowhandy` command in its own isolated environment |
+| Needs | Python ≥ 3.11 | Python ≥ 3.11 and [pipx](https://pipx.pypa.io/) |
+| Install / update | copy one file | `pipx install` / `pipx upgrade` (or reinstall) |
+| Uninstall | delete one file | `pipx uninstall wowhandy` |
+| Handy path | `~/.local/bin/wowhandy.pyz` | `~/.local/bin/wowhandy` |
+| Good for | simplest setup, nothing installed system-wide, easy to copy to another machine | people who already use pipx and like managed updates |
+| Downsides | you call it by its file name (`wowhandy.pyz`); updating means rebuilding/copying the file | needs pipx; a slightly heavier setup for a tiny tool |
+
+Recommendation: **A** – it is a single file and has no install step to break.
+
+### A) Single file
 
 ```sh
-# a) single file, nothing to install
-python3 scripts/build_zipapp.py              # -> dist/wowhandy.pyz
+cd /path/to/wowhandy
+python3 scripts/build_zipapp.py                          # -> dist/wowhandy.pyz
 install -Dm755 dist/wowhandy.pyz ~/.local/bin/wowhandy.pyz
-
-# b) as a command with pipx
-pipx install /path/to/wowhandy               # -> ~/.local/bin/wowhandy
 ```
 
-Then check the setup and create your config file:
+- **Update:** `git pull` in the source folder, then run the same two commands
+  again (the file is replaced; Handy keeps using the same path).
+- **Uninstall:** `rm ~/.local/bin/wowhandy.pyz`
+
+### B) pipx
+
+```sh
+pipx install /path/to/wowhandy
+```
+
+- **Update:** `git pull` in the source folder, then
+  `pipx install --force /path/to/wowhandy`
+- **Uninstall:** `pipx uninstall wowhandy`
+
+### After installing
+
+Check the setup and create your config file:
 
 ```sh
 wowhandy --check          # config, ydotool, ydotoold, clipboard tool
 wowhandy --init-config    # writes ~/.config/wowhandy/config.toml (commented)
 ```
 
-(With the single file, call `~/.local/bin/wowhandy.pyz` instead of `wowhandy`.)
+With option A call `~/.local/bin/wowhandy.pyz` instead of `wowhandy`.
+
+### Updates and your config file
+
+Updating never touches `~/.config/wowhandy/config.toml`. New defaults (for
+example new channel words) therefore do not appear in your file automatically –
+your `[triggers]` list replaces the built-in one. Compare after an update:
+
+```sh
+wowhandy --show-default-config | diff ~/.config/wowhandy/config.toml -
+```
+
+…and copy over what you want, or start fresh with
+`wowhandy --init-config --force` (overwrites your file).
+
+### Removing everything
+
+Uninstall as above, then delete the config and the log, and switch Handy's
+paste method back to its default:
+
+```sh
+rm -r ~/.config/wowhandy ~/.local/state/wowhandy
+```
 
 ## Configure Handy
 
@@ -144,6 +194,7 @@ party = "/p"
 gruppe = "/p"
 raid = "/raid"
 rate = "/raid"   # mishearing of "Raid" in German sentences
+schlachtzug = "/raid"
 guild = "/g"
 gilde = "/g"
 # ...
@@ -200,4 +251,4 @@ inspired by [Decktation](https://github.com/silverfoxy/decktation) (MIT), which
 brought dictation to WoW on the Steam Deck. Thanks to the
 [Handy](https://github.com/cjpais/Handy) project for the external-script hook.
 
-License: to be decided.
+License: [MIT](LICENSE).

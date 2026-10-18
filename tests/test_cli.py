@@ -46,3 +46,8 @@ def test_init_config(isolated_dirs, capsys):
 def test_version(capsys):
     assert cli.main(["--version"]) == 0
     assert capsys.readouterr().out.startswith("wowhandy ")
+
+
+def test_show_default_config(capsys):
+    assert cli.main(["--show-default-config"]) == 0
+    assert 'schlachtzug = "/raid"' in capsys.readouterr().out

@@ -46,6 +46,7 @@ party = "/p"
 gruppe = "/p"
 raid = "/raid"
 rate = "/raid"        # common mishearing of "Raid" in German sentences
+schlachtzug = "/raid" # German word for raid
 guild = "/g"
 guilt = "/g"          # common mishearing of "guild"
 gilde = "/g"
