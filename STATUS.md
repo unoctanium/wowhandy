@@ -33,7 +33,12 @@ the single file both work (throwaway venv / scratch folder). Linux only.
 - Verified locally end to end in a throwaway HOME: install 0.1.9 → update to
   0.2.0 → "already up to date" → uninstall keeps config → purge removes all →
   installer refuses a pipx link. 105 tests pass.
-- **Next:** commit + push (CI), then tag v0.2.0 after the user's go.
+- Committed and pushed (27bc76f, CI fix 63d2c63: the installer test unsets the
+  runner's XDG_CONFIG_HOME/XDG_STATE_HOME). CI green on Python 3.11–3.14.
+- **Waiting for the user's "go"** to tag v0.2.0 (then verify PyPI page, GitHub
+  release assets `wowhandy.pyz` + `install.sh`, and the curl one-liner).
+- Note for the user: an existing pipx install blocks the installer (it refuses
+  to overwrite the pipx link) – `pipx uninstall wowhandy` first, or stay on pipx.
 
 **Tested by the user (2026-10-18): works without problems in KWrite and in WoW**
 (installed and configured by the user following the README).
