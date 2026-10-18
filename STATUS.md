@@ -4,55 +4,35 @@ _Last update: 2026-10-18_
 
 ## Current state
 
-**wowhandy 0.1.0 is released (2026-10-18):** on PyPI
-(https://pypi.org/project/wowhandy/, author Odo Maletzki, MIT, wheel + sdist)
-and as GitHub release v0.1.0 with `wowhandy.pyz`
-(https://github.com/unoctanium/wowhandy/releases). Release workflow run
-39158136682: build, pypi, github-release all success. Verified like a user:
-`pip install wowhandy==0.1.0` from pypi.org and the README `curl` download of
-the single file both work (throwaway venv / scratch folder). Linux only.
-93 tests pass. Repo: github.com/unoctanium/wowhandy (branch `main`, tag `v0.1.0`).
+**wowhandy 0.2.0 is released (2026-10-18)** – "one command" install.
+PyPI https://pypi.org/project/wowhandy/0.2.0/ (wheel + sdist; author Odo
+Maletzki, MIT) and GitHub release v0.2.0 with `wowhandy.pyz`, `install.sh`,
+wheel, sdist. Release run 39160497195: build, pypi, github-release success.
+Verified like a user in a throwaway HOME: the README curl one-liner installs
+0.2.0 to `~/.local/bin/wowhandy`, creates the config, prints check + Handy
+settings; `--update` → "Already up to date"; dry-run "Kanal Schlachtzug …" →
+`/raid …`. CI green on Python 3.11–3.14 (includes an installer test). 105 tests.
+Linux only. Repo: github.com/unoctanium/wowhandy (branch `main`, tags v0.1.0, v0.2.0).
 
-**0.2.0 prepared (not yet released): "one command" install** – user request
-2026-10-18 after confusion about pip / pipx / single file (research:
-`docs/research/install-ux.md`; same pattern as uv, ruff, poetry, yt-dlp):
-- `install.sh` (POSIX sh, no sudo): downloads the release file to
-  `~/.local/bin/wowhandy` (no `.pyz`), refuses to overwrite a pipx/uv link,
-  creates the config once, runs `--check`, prints the Handy settings.
-- `wowhandy --update` (single-file install replaces itself atomically after
-  checking the download runs; pipx/uv: prints their command) and
-  `wowhandy --uninstall [--purge]` (`src/wowhandy/selfmanage.py`).
-- `--check` names the install command for the detected distribution
-  (arch/debian/fedora/suse from /etc/os-release) and prints the Handy settings
-  with the right script path.
-- README: one-command install at the very top with "Not `pip install`" note,
-  Handy setup table, update/uninstall, requirements; pipx/uv/source moved to
-  "Alternatives for developers".
-- Workflows: release attaches `install.sh`; CI runs the installer in a
-  throwaway HOME (install, config created, uninstall --purge).
-- Verified locally end to end in a throwaway HOME: install 0.1.9 → update to
-  0.2.0 → "already up to date" → uninstall keeps config → purge removes all →
-  installer refuses a pipx link. 105 tests pass.
-- Committed and pushed (27bc76f, CI fix 63d2c63: the installer test unsets the
-  runner's XDG_CONFIG_HOME/XDG_STATE_HOME). CI green on Python 3.11–3.14.
-- **Waiting for the user's "go"** to tag v0.2.0 (then verify PyPI page, GitHub
-  release assets `wowhandy.pyz` + `install.sh`, and the curl one-liner).
-- Note for the user: an existing pipx install blocks the installer (it refuses
-  to overwrite the pipx link) – `pipx uninstall wowhandy` first, or stay on pipx.
+What 0.2.0 added (research: `docs/research/install-ux.md`; pattern of uv, ruff,
+poetry, yt-dlp):
+- `install.sh` (POSIX sh, no sudo, refuses to overwrite a pipx/uv link).
+- `wowhandy --update` (single file replaces itself atomically after checking
+  the download runs; pipx/uv: prints their command), `--uninstall [--purge]`
+  (`src/wowhandy/selfmanage.py`), `--show-default-config`.
+- `--check` names the install command for the detected distribution and prints
+  the Handy settings with the right script path.
+- `schlachtzug = "/raid"` in the defaults.
+- README: one command at the top with a "Not `pip install`" note.
 
-**Tested by the user (2026-10-18): works without problems in KWrite and in WoW**
-(installed and configured by the user following the README).
+**Tested by the user (0.1.0, 2026-10-18): works in KWrite and in WoW.**
 
-Since that test (not yet in the user's installed copy):
-- `schlachtzug = "/raid"` added to the defaults (template and built-in list).
-  The user's existing `~/.config/wowhandy/config.toml` does not get it
-  automatically (`[triggers]` replaces the defaults) – add the line by hand.
-- `--show-default-config` to compare the config after updates.
-- README: comparison of the two install options, update and uninstall
-  instructions, "Removing everything".
-
-**Next step:** user updates the installed copy and adds the Schlachtzug line;
-then backlog (see below).
+**Next step (user):** switch the own install to 0.2.0. If installed with pipx:
+`pipx uninstall wowhandy`, then the curl one-liner (or stay on pipx with
+`pipx upgrade wowhandy`). Script path in Handy stays `~/.local/bin/wowhandy`.
+The existing `~/.config/wowhandy/config.toml` is kept; add
+`schlachtzug = "/raid"` by hand (compare with `--show-default-config`).
+Then backlog (see below).
 
 ## What exists
 
