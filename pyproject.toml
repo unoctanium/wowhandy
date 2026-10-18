@@ -4,19 +4,38 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wowhandy"
-version = "0.1.0"
+dynamic = ["version"]  # single source: src/wowhandy/__init__.py
 description = "World of Warcraft chat layer for the Handy speech-to-text app: channel prefixes, slash commands and reliable chat pasting"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 license-files = ["LICENSE"]
 dependencies = []  # standard library only, on purpose
+authors = [{ name = "unoctanium" }]
+keywords = ["world of warcraft", "wow", "speech-to-text", "dictation", "handy", "chat"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Games/Entertainment",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+
+[project.urls]
+Homepage = "https://github.com/unoctanium/wowhandy"
+Issues = "https://github.com/unoctanium/wowhandy/issues"
+Handy = "https://github.com/cjpais/Handy"
 
 [project.optional-dependencies]
 test = ["pytest>=8"]
 
 [project.scripts]
 wowhandy = "wowhandy.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "wowhandy.__version__" }
 
 [tool.setuptools.packages.find]
 where = ["src"]

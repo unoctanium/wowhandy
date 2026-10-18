@@ -62,42 +62,47 @@ macOS and Windows are not supported yet; the code is prepared for them (see
 
 ## Installation
 
-There are two ways to install wowhandy. Both give you the same program; they
-differ in how it is packaged and updated.
+Two ways to install – both give you the same program:
 
-| | **A) Single file** (`wowhandy.pyz`) | **B) pipx** (`wowhandy` command) |
+| | **A) Single file** (`wowhandy.pyz`) | **B) pipx from PyPI** (`wowhandy` command) |
 |---|---|---|
 | What you get | one executable file (~13 KB) containing everything | a `wowhandy` command in its own isolated environment |
 | Needs | Python ≥ 3.11 | Python ≥ 3.11 and [pipx](https://pipx.pypa.io/) |
-| Install / update | copy one file | `pipx install` / `pipx upgrade` (or reinstall) |
+| Install | download one file | `pipx install wowhandy` |
+| Update | download the new file over the old one | `pipx upgrade wowhandy` |
 | Uninstall | delete one file | `pipx uninstall wowhandy` |
 | Handy path | `~/.local/bin/wowhandy.pyz` | `~/.local/bin/wowhandy` |
-| Good for | simplest setup, nothing installed system-wide, easy to copy to another machine | people who already use pipx and like managed updates |
-| Downsides | you call it by its file name (`wowhandy.pyz`); updating means rebuilding/copying the file | needs pipx; a slightly heavier setup for a tiny tool |
-
-Recommendation: **A** – it is a single file and has no install step to break.
+| Good for | simplest setup, nothing installed, easy to copy to another machine | managed updates with one command |
+| Downsides | you call it by its file name; updates are manual downloads | needs pipx |
 
 ### A) Single file
 
 ```sh
-cd /path/to/wowhandy
-python3 scripts/build_zipapp.py                          # -> dist/wowhandy.pyz
-install -Dm755 dist/wowhandy.pyz ~/.local/bin/wowhandy.pyz
+curl -fLo ~/.local/bin/wowhandy.pyz --create-dirs \
+  https://github.com/unoctanium/wowhandy/releases/latest/download/wowhandy.pyz
+chmod +x ~/.local/bin/wowhandy.pyz
 ```
 
-- **Update:** `git pull` in the source folder, then run the same two commands
-  again (the file is replaced; Handy keeps using the same path).
+- **Update:** run the same two commands again (Handy keeps using the same path).
 - **Uninstall:** `rm ~/.local/bin/wowhandy.pyz`
 
-### B) pipx
+### B) pipx from PyPI
 
 ```sh
-pipx install /path/to/wowhandy
+pipx install wowhandy
 ```
 
-- **Update:** `git pull` in the source folder, then
-  `pipx install --force /path/to/wowhandy`
+- **Update:** `pipx upgrade wowhandy`
 - **Uninstall:** `pipx uninstall wowhandy`
+
+### From source (development version)
+
+```sh
+pipx install git+https://github.com/unoctanium/wowhandy        # as a command
+# or build the single file yourself:
+git clone https://github.com/unoctanium/wowhandy && cd wowhandy
+python3 scripts/build_zipapp.py                                 # -> dist/wowhandy.pyz
+```
 
 ### After installing
 
@@ -241,6 +246,8 @@ python3 -m venv .venv && .venv/bin/pip install -e '.[test]'
 .venv/bin/pytest
 ```
 
+Releases are built and published by GitHub Actions – see [RELEASING.md](https://github.com/unoctanium/wowhandy/blob/main/RELEASING.md).
+
 Layout: `message.py` (chat line), `config.py` (settings), `paste/` (platform
 backends: `base.py` interface, `linux.py`), `cli.py` (what Handy calls).
 
@@ -251,4 +258,4 @@ inspired by [Decktation](https://github.com/silverfoxy/decktation) (MIT), which
 brought dictation to WoW on the Steam Deck. Thanks to the
 [Handy](https://github.com/cjpais/Handy) project for the external-script hook.
 
-License: [MIT](LICENSE).
+License: [MIT](https://github.com/unoctanium/wowhandy/blob/main/LICENSE).

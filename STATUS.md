@@ -84,7 +84,18 @@ same key.
 - Push-to-talk listener for a double tap → Escape (close the chat): needs a
   small own listener service that watches the push-to-talk key, forwards it to
   Handy and sends Escape on a double tap. Later (user, 2026-10-18).
-- Packaging: easy install (pipx from GitHub, single file release, maybe AUR).
+- Packaging – **prepared locally 2026-10-18, not yet published:** version only in
+  `src/wowhandy/__init__.py` (pyproject reads it), project metadata/URLs for
+  `github.com/unoctanium/wowhandy`, GitHub Actions `ci.yml` (tests on Python
+  3.11–3.14 + single-file smoke test) and `release.yml` (tag `v*` → PyPI via
+  trusted publishing + GitHub release with `wowhandy.pyz`; manual run →
+  TestPyPI rehearsal), `RELEASING.md`, README install via PyPI / release file /
+  source. Local check: sdist + wheel build, wheel contains template and LICENSE,
+  no dependencies, installs and runs in a fresh venv. The name `wowhandy` was
+  free on PyPI and TestPyPI (2026-10-18). **AUR dropped** (the user cannot
+  register an AUR account at the moment). **Next:** the user creates the GitHub
+  repo, first push, set up environments + trusted publishers, TestPyPI
+  rehearsal, then tag v0.1.0 – PyPI upload only after the user's explicit go.
 
 **Medium**
 - GitHub repository (license: MIT, decided 2026-10-18).
